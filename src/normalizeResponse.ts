@@ -79,9 +79,53 @@ function normalizeFieldsGroup(group: SmartGroup, raw: any) {
       out[key] = raw[mapping] ?? null;
       continue;
     }
+    
+    // support nested group mapping inside fields: { source: 'MediaImage', fields: { url: 'mediaImage.url' } }
+    if (mapping && typeof mapping === 'object' && 'source' in mapping) {
+      const nestedRaw = raw[key];
+      if (!nestedRaw) {
+        out[key] = null;
+        continue;
+      }
+
+      // If the nested group maps a single field, return that value directly (convenience for images -> url)
+      const fieldKeys = Object.keys(mapping.fields || {});
+      if (fieldKeys.length === 1) {
+        const singleMap = mapping.fields![fieldKeys[0]];
+        if (typeof singleMap === 'string') {
+          out[key] = getByPath(nestedRaw, singleMap) ?? null;
+          continue;
+        }
+      }
+
+      // Otherwise build an object with the mapped fields
+      const nestedOut: any = {};
+      for (const nk of fieldKeys) {
+        const nm = mapping.fields![nk];
+        if (nm === true) {
+          nestedOut[nk] = nestedRaw[nk] ?? null;
+        } else if (typeof nm === 'string') {
+          nestedOut[nk] = getByPath(nestedRaw, nm) ?? null;
+        }
+      }
+
+      out[key] = nestedOut;
+      continue;
+    }
   }
 
   return out;
+}
+
+function getByPath(obj: any, path: string) {
+  if (!obj || !path) return null;
+  const parts = path.split('.');
+  let cur: any = obj;
+  for (const p of parts) {
+    if (cur == null) return null;
+    cur = cur[p];
+  }
+  return cur;
 }
 
 function normalizeUnionGroup(group: SmartGroup, rawList: any[]) {

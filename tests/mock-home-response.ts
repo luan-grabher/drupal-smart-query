@@ -19,7 +19,8 @@ export const MockHomeResponse = {
             __typename: "MediaImage",
             mediaImage: {
               url: "http://img.com/meta.jpg"
-            }
+            },
+            url: "http://img.com/meta.jpg"
           }
         },
 
@@ -31,11 +32,13 @@ export const MockHomeResponse = {
             textoHtml: { value: "<p>B</p>" },
             midiaDesktop: {
               __typename: "MediaImage",
-              mediaImage: { url: "http://img.com/desk.jpg" }
+              mediaImage: { url: "http://img.com/desk.jpg" },
+              url: "http://img.com/desk.jpg"
             },
             midiaMobile: {
               __typename: "MediaImage",
-              mediaImage: { url: "http://img.com/mob.jpg" }
+              mediaImage: { url: "http://img.com/mob.jpg" },
+              url: "http://img.com/mob.jpg"
             }
           },
           {
@@ -45,7 +48,8 @@ export const MockHomeResponse = {
             textoHtml: { processed: "<p>TEXTO</p>" },
             imagem: {
               __typename: "MediaImage",
-              mediaImage: { url: "http://img.com/foto.jpg" }
+              mediaImage: { url: "http://img.com/foto.jpg" },
+              url: "http://img.com/foto.jpg"
             }
           }
         ]
