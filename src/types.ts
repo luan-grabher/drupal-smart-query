@@ -11,5 +11,5 @@ export interface SmartGroup {
 }
 
 export interface SmartQueryDSL {
-  route: Record<string, any>;
+  [rootField: string]: any;
 }
